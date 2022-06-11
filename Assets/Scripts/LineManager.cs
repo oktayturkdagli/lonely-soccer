@@ -1,16 +1,14 @@
-using System;
-using Lean.Touch;
 using UnityEngine;
 using System.Collections.Generic;
+using Lean.Touch;
 
 public class LineManager : MonoBehaviour
 {
-    [SerializeField] LineRenderer lineRenderer;
-    [SerializeField] Camera cam;
-    [SerializeField] Transform ball;
-    [SerializeField] Transform[] dummies;
-    [SerializeField] LayerMask maskLayer;
-    List<Vector3> destinationList = new List<Vector3>();
+    [SerializeField] private LineRenderer lineRenderer;
+    [SerializeField] private Camera cam;
+    [SerializeField] private Transform ball;
+    [SerializeField] private LayerMask maskLayer;
+    public List<Vector3> destinationList = new List<Vector3>();
     
     bool canDrawLine = true;
 
@@ -62,17 +60,16 @@ public class LineManager : MonoBehaviour
             
             if (hitTransform != null)
             {
-                Debug.Log(i);
                 AddNode(hit.transform, hit);
             }
         }
     }
     
-    RaycastHit CheckHit(Vector3 firstPoint, Vector3 direction)
+    private RaycastHit CheckHit(Vector3 firstPoint, Vector3 direction)
     {
         RaycastHit hit;
-        firstPoint.y = 1;
-        direction.y = 1;
+        firstPoint.y = 0.35f;
+        direction.y = 0.35f;
         Debug.DrawRay(firstPoint, direction, Color.red, 3f);
         if (Physics.Raycast(firstPoint, direction, out hit, 10f, maskLayer))
         {
@@ -88,14 +85,17 @@ public class LineManager : MonoBehaviour
         {
             Vector3 reflect = Vector3.Reflect(destinationList[destinationList.Count - 1], hit.normal);
             Vector3 node = hit.point;
+            reflect.y = 0.35f;
+            node.y = 0.35f;
             destinationList.RemoveAt(destinationList.Count - 1);
             destinationList.Add(node);
             destinationList.Add(reflect);
         }
         else if (hitTransform.gameObject.tag == "Net")
         {
-            Vector3 reflect = Vector3.Reflect(destinationList[destinationList.Count - 1], hit.normal);
             Vector3 node = hit.point;
+            node.y = 0.35f;
+            node.z += 1f;
             destinationList.RemoveAt(destinationList.Count - 1);
             destinationList.Add(node);
         }

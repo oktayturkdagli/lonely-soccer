@@ -13,8 +13,9 @@ public class EventManager : MonoBehaviour
     //Events are created
     public event Action onStartGame;
     public event Action onFinishGame;
+    public event Action onShootBall;
 
-
+    
     //Events cannot be triggered directly from another class so they are triggered via functions
     public void OnStartGame()
     {
@@ -25,11 +26,10 @@ public class EventManager : MonoBehaviour
     {
         onFinishGame?.Invoke();
     }
-}
-
-//ENUMs are used for ease of naming when transferring data
-public enum DataType
-{
-    PlayerData
+    
+    public void OnShootBall()
+    {
+        onShootBall?.Invoke();
+    }
 }
 
