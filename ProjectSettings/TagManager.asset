@@ -4,9 +4,9 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Net
-  - Dumy
   - Reflector
+  - Dummy
+  - Goal
   layers:
   - Default
   - TransparentFX

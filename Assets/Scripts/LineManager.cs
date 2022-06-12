@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using System.Collections.Generic;
 using Lean.Touch;
@@ -10,17 +11,30 @@ public class LineManager : MonoBehaviour
     [SerializeField] private LayerMask maskLayer;
     public List<Vector3> destinationList = new List<Vector3>();
     
-    bool canDrawLine = true;
+    bool canDrawLine = false, canPlay = false;
+
+    private void Start()
+    {
+        EventManager.current.onStartGame += OnStartGame;
+    }
+    
+    void OnStartGame()
+    {
+        canPlay = true;
+    }
 
     public void OnDown(LeanFinger finger)
     {
-        lineRenderer.enabled = true;
-        canDrawLine = true;
+        if (canPlay)
+        {
+            lineRenderer.enabled = true;
+            canDrawLine = true;
+        }
     }
     
     public void OnUpdate(LeanFinger finger)
     {
-        if (canDrawLine)
+        if (canPlay && canDrawLine)
         {
             canDrawLine = false;
             DefineFirstNode(finger.GetWorldPosition(0, cam));
@@ -31,7 +45,12 @@ public class LineManager : MonoBehaviour
     
     public void OnUp(LeanFinger finger)
     {
-        lineRenderer.enabled = false;
+        if (canPlay)
+        {
+            lineRenderer.enabled = false;
+            canPlay = false;
+            EventManager.current.OnDrawLine();
+        }
     }
     
     private void DefineFirstNode(Vector3 mousePosition)
@@ -81,7 +100,7 @@ public class LineManager : MonoBehaviour
 
     private void AddNode(Transform hitTransform, RaycastHit hit)
     {
-        if (hitTransform.gameObject.tag == "Reflector")
+        if (hitTransform.gameObject.CompareTag("Reflector"))
         {
             Vector3 reflect = Vector3.Reflect(destinationList[destinationList.Count - 1], hit.normal);
             Vector3 node = hit.point;
@@ -91,7 +110,7 @@ public class LineManager : MonoBehaviour
             destinationList.Add(node);
             destinationList.Add(reflect);
         }
-        else if (hitTransform.gameObject.tag == "Net")
+        else if (hitTransform.gameObject.CompareTag("Goal"))
         {
             Vector3 node = hit.point;
             node.y = 0.35f;
@@ -114,5 +133,10 @@ public class LineManager : MonoBehaviour
         }
 
         canDrawLine = true;
+    }
+
+    private void OnDestroy()
+    {
+        EventManager.current.onStartGame -= OnStartGame;
     }
 }

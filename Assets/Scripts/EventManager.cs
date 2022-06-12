@@ -13,7 +13,11 @@ public class EventManager : MonoBehaviour
     //Events are created
     public event Action onStartGame;
     public event Action onFinishGame;
-    public event Action onShootBall;
+    public event Action onWinGame;
+    public event Action onLoseGame;
+    public event Action onDrawLine;
+    public event Action onKickTheBall;
+    public event Action onStopTheBall;
 
     
     //Events cannot be triggered directly from another class so they are triggered via functions
@@ -27,9 +31,30 @@ public class EventManager : MonoBehaviour
         onFinishGame?.Invoke();
     }
     
-    public void OnShootBall()
+    public void OnWinGame()
     {
-        onShootBall?.Invoke();
+        onWinGame?.Invoke();
     }
+    
+    public void OnLoseGame()
+    {
+        onLoseGame?.Invoke();
+    }
+    
+    public void OnDrawLine()
+    {
+        onDrawLine?.Invoke();
+    }
+    
+    public void OnKickTheBall()
+    {
+        onKickTheBall?.Invoke();
+    }
+    
+    public void OnStopTheBall()
+    {
+        onStopTheBall?.Invoke();
+    }
+    
 }
 
