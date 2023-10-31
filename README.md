@@ -1,5 +1,4 @@
 ## 📋 Lonely Soccer
-Aim and shoot lonely this is a [lonely-soccer](https://apps.apple.com/us/app/lonely-soccer/id1530704670) clone.
 <br/><br/>
 
 
